@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
 import Papa from 'papaparse';
+import { spawn } from 'child_process';
 
 const LocalEncryption = () => {
   const [file, setFile] = useState(null);
   const [description, setDescription] = useState('');
   const [preview, setPreview] = useState(null);
+  const [encryptionStatus, setEncryptionStatus] = useState({
+    isEncrypting: false,
+    encryptedFilePath: '',
+  });
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -12,6 +17,10 @@ const LocalEncryption = () => {
       setFile(selectedFile);
       setDescription('');
       setPreview(null);
+      setEncryptionStatus({
+        isEncrypting: false,
+        encryptedFilePath: '',
+      });
     }
   };
 
@@ -39,11 +48,28 @@ const LocalEncryption = () => {
     }
   };
 
-  const handleEncryption = () => {
+  const handleEncryption = async () => {
     if (file && description) {
-      // 执行加密操作
-      console.log('文件加密中...', file, description);
-      // 加密完成后的操作,如显示成功消息或导航到其他页面
+      setEncryptionStatus({ isEncrypting: true, encryptedFilePath: '' });
+      //   var python = require('child_process').spawn('python', [
+      //     '/src/services/test_in_js.py',
+      //   ]);
+      try {
+        // We wait for data to arrive
+        // await python.stdout.on('data', (result) => {
+        //   const { data } = JSON.parse(result);
+        //   console.log(data);
+        setTimeout(() => {
+          setEncryptionStatus({
+            isEncrypting: false,
+            encryptedFilePath: '/src/services/spector.py',
+          });
+        }, 1200);
+        // });
+      } catch (err) {
+        console.error(err);
+        setEncryptionStatus({ isEncrypting: false, encryptedFilePath: '' });
+      }
     }
   };
 
@@ -133,13 +159,27 @@ const LocalEncryption = () => {
             rows={4}
           />
         </div>
+
         <button
           onClick={handleEncryption}
-          disabled={!file || !description}
+          disabled={!file || !description || encryptionStatus.isEncrypting}
           className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Encrypt File
+          {encryptionStatus.isEncrypting ? 'Encrypting...' : 'Encrypt File'}
         </button>
+        {encryptionStatus.isEncrypting && (
+          <div className="mt-4">
+            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-900"></div>
+          </div>
+        )}
+        {encryptionStatus.encryptedFilePath && (
+          <div className="mt-4">
+            <p className="text-green-600">
+              Encryption complete. File saved at:{' '}
+              {encryptionStatus.encryptedFilePath}
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
