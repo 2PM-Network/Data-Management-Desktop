@@ -12,9 +12,10 @@ import KeyManagement from './components/KeyManagement';
 import Specification from './components/Specification';
 import Choose from './components/Choose';
 import LocalEncryption from './components/LocalEncryption';
+import UploadEncryptedData from './components/DataUpload';
+import OneClickOperation from './components/OneClickOperation';
 
 import './App.css';
-import { useState } from 'react';
 
 const sidebarSections = [
   {
@@ -36,7 +37,11 @@ const sidebarSections = [
         emoji: '⏫',
         label: 'Upload Encrypted Data',
       },
-      { path: '/one-stop-operation', emoji: '🛠️', label: 'One Stop Operation' },
+      {
+        path: '/one-click-operation',
+        emoji: '🛠️',
+        label: 'One Click Operation',
+      },
     ],
   },
   {
@@ -96,6 +101,11 @@ function MainContent() {
         <Route path="/specification" element={<Specification />} />
         <Route path="/choose-encryption" element={<Choose />} />
         <Route path="/local-encryption" element={<LocalEncryption />} />
+        <Route
+          path="/upload-encrypted-data"
+          element={<UploadEncryptedData />}
+        />
+        <Route path="/one-click-operation" element={<OneClickOperation />} />
       </Routes>
     </main>
   );
