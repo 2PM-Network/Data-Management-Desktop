@@ -1,19 +1,13 @@
 import React from 'react';
+import logo2pm from '../../../.erb/img/2pm.jpg';
+import logo0g from '../../../.erb/img/0g.jpg';
 
 const Home = ({ onGetStarted }) => {
   return (
     <div className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-r from-blue-200 to-blue-300 animate-pulse">
       <div className="flex justify-center space-x-8 mb-8">
-        <img
-          src="path/to/image1.jpg"
-          alt="Image 1"
-          className="w-40 h-40 rounded-full"
-        />
-        <img
-          src="path/to/image2.jpg"
-          alt="Image 2"
-          className="w-40 h-40 rounded-full"
-        />
+        <img src={logo2pm} alt="Image 1" className="w-40 h-40 rounded-full" />
+        <img src={logo0g} alt="Image 2" className="w-40 h-40 rounded-full" />
       </div>
       <h1 className="text-5xl font-fantasy text-center mb-4">
         Data Management Desktop

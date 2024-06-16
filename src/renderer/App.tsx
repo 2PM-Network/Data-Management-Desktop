@@ -7,6 +7,10 @@ import {
   useNavigate,
 } from 'react-router-dom';
 
+import logo2pm from '../../.erb/img/2pm.jpg';
+import logoZama from '../../.erb/img/zama.jpg';
+import logo0g from '../../.erb/img/0g.jpg';
+
 import Home from './components/Home';
 import KeyManagement from './components/KeyManagement';
 import Specification from './components/Specification';
@@ -47,9 +51,9 @@ const sidebarSections = [
   {
     title: 'Documentation',
     items: [
-      { path: '/2pm-network', emoji: '📄', label: '2PM.Network' },
-      { path: '/zama', emoji: '📄', label: 'ZAMA' },
-      { path: '/0g', emoji: '📄', label: '0G' },
+      { path: '/2pm-network', logo: logo2pm, label: '2PM.Network' },
+      { path: '/zama', logo: logoZama, label: 'ZAMA' },
+      { path: '/0g', logo: logo0g, label: '0G' },
     ],
   },
 ];
@@ -73,7 +77,12 @@ function Sidebar() {
                     }`
                   }
                 >
-                  <span className="text-xl mr-2">{item.emoji}</span>{' '}
+                  {item.emoji && (
+                    <span className="text-xl mr-2">{item.emoji}</span>
+                  )}
+                  {item.logo && (
+                    <img src={item.logo} alt="logo" className="w-6 h-6 mr-2" />
+                  )}
                   {item.label}
                 </NavLink>
               </li>
@@ -85,7 +94,7 @@ function Sidebar() {
         </div>
       ))}
       <div className="fixed bottom-4 left-4">
-        <button className="bg-red-500 hover:bg-red-700 text-white py-2 px-4 rounded-full">
+        <button className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded-full">
           FAQ
         </button>
       </div>

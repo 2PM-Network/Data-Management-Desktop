@@ -1,24 +1,73 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 
 const OneClickOperation = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [downloadLink, setDownloadLink] = useState('');
+  const [file, setFile] = useState(null);
 
-  const handleClick = () => {
+  const handleFileChange = useCallback((e) => {
+    setFile(e.target.files[0]);
+  }, []);
+
+  const handleClick = async () => {
     setLoading(true);
-    // Simulate encryption and data transfer
-    setTimeout(() => {
+
+    try {
+      const formData = new FormData();
+      if (file) {
+        formData.append('file', file);
+      } else {
+        setLoading(false);
+        setSuccess(false);
+        alert('Please select a file to upload.');
+        return;
+      }
+      formData.append('chain_option', '0G');
+
+      const response = await fetch('http://3.81.203.116:8000/v1/file', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const filename = data.file_name;
+
+        const downloadResponse = await fetch(
+          `http://3.81.203.116:8000/v1/file/${filename}`,
+          {
+            method: 'GET',
+          },
+        );
+
+        if (downloadResponse.ok) {
+          const blob = await downloadResponse.blob();
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `encrypted-${filename}`; // 设置下载文件的名称
+          a.click();
+          window.URL.revokeObjectURL(url);
+          setDownloadLink(url); // 将下载链接存储在状态中
+        } else {
+          console.error('Error downloading file:', downloadResponse.status);
+        }
+      } else {
+        console.error('Error uploading file:', response.status);
+      }
+    } catch (error) {
+      console.error('Error uploading file:', error);
+    } finally {
       setLoading(false);
       setSuccess(true);
-      setDownloadLink('https://example.com/encrypted_data.zip');
-    }, 2000);
+    }
   };
 
   return (
     <div className="max-w-full pr-32 mt-14 bg-white rounded-md">
       <h1 className="text-3xl font-bold mb-6 text-left font-sans">
-        Upload Encrypted Data
+        One Click Operation
       </h1>
 
       <div className="max-w-lg mx-auto p-6 bg-white rounded-md shadow-md">
@@ -27,6 +76,18 @@ const OneClickOperation = () => {
           the reliability of data privacy during the encryption process, but we
           cannot guarantee no data leakage during transfer.
         </p>
+        <div className="mb-4">
+          <label htmlFor="file" className="block font-bold mb-2">
+            File to upload:
+          </label>
+          <input
+            type="file"
+            id="file"
+            className="border border-gray-400 p-2 w-full"
+            onChange={handleFileChange}
+            accept=".csv, .xls, .xlsx, .json"
+          />
+        </div>
         <div className="flex justify-center mb-6">
           <button
             onClick={handleClick}
