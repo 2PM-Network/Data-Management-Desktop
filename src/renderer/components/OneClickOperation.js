@@ -5,9 +5,14 @@ const OneClickOperation = () => {
   const [success, setSuccess] = useState(false);
   const [downloadLink, setDownloadLink] = useState('');
   const [file, setFile] = useState(null);
+  const [fileName, setFileName] = useState('');
 
   const handleFileChange = useCallback((e) => {
-    setFile(e.target.files[0]);
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+      setFileName(selectedFile.name);
+    }
   }, []);
 
   const handleClick = async () => {
@@ -46,10 +51,10 @@ const OneClickOperation = () => {
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement('a');
           a.href = url;
-          a.download = `encrypted-${filename}`; // 设置下载文件的名称
+          setDownloadLink(url);
+          a.download = `encrypted-${filename}`;
           a.click();
           window.URL.revokeObjectURL(url);
-          setDownloadLink(url); // 将下载链接存储在状态中
         } else {
           console.error('Error downloading file:', downloadResponse.status);
         }
@@ -70,25 +75,32 @@ const OneClickOperation = () => {
         One Click Operation
       </h1>
 
-      <div className="max-w-lg mx-auto p-6 bg-white rounded-md shadow-md">
-        <p className="text-gray-600 mb-6">
+      <div className="max-w-lg mx-auto p-8 bg-white rounded-md shadow-md">
+        <p className="text-gray-600 mb-6 text-center">
           There is a risk during data transfer from local to server. We ensure
           the reliability of data privacy during the encryption process, but we
           cannot guarantee no data leakage during transfer.
         </p>
-        <div className="mb-4">
-          <label htmlFor="file" className="block font-bold mb-2">
-            File to upload:
-          </label>
-          <input
-            type="file"
-            id="file"
-            className="border border-gray-400 p-2 w-full"
-            onChange={handleFileChange}
-            accept=".csv, .xls, .xlsx, .json"
-          />
+        <div className="flex justify-center mb-4">
+          <div className="text-center">
+            <label
+              htmlFor="fileImport"
+              className="btn border py-2 px-32 rounded-full hover:bg-gray-100 hover:cursor-pointer font-cursive"
+            >
+              Choose Data File
+            </label>
+            <input
+              type="file"
+              id="fileImport"
+              accept=".csv, .xls, .xlsx, .json"
+              style={{ visibility: 'hidden' }}
+              className="border border-gray-300 rounded-md px-4 py-2 w-full"
+              onChange={handleFileChange}
+            />
+            {file && <p className="mt-2">{fileName}</p>}
+          </div>
         </div>
-        <div className="flex justify-center mb-6">
+        <div className="flex justify-center mb-4">
           <button
             onClick={handleClick}
             disabled={loading}

@@ -79,14 +79,21 @@ const LocalEncryption = () => {
         <h1 className="text-3xl font-bold mb-6 text-left font-sans">
           🔒 Local Encryption
         </h1>
-        <div className="mb-4">
+        <div className="mb-2">
           <label htmlFor="fileInput" className="block mb-2 font-semibold">
             Select File:
+          </label>
+          <label
+            htmlFor="fileInput"
+            className="btn border p-2 rounded-full hover:bg-gray-100 hover:cursor-pointer font-cursive"
+          >
+            Choose Key File
           </label>
           <input
             type="file"
             id="fileInput"
             accept=".csv,.xlsx,.xls,.json"
+            style={{ visibility: 'hidden' }}
             onChange={handleFileChange}
             className="border border-gray-300 rounded-md px-4 py-2 w-full"
           />

@@ -35,11 +35,15 @@ const sidebarSections = [
         emoji: '✅',
         label: 'Choose your Encryption',
       },
-      { path: '/local-encryption', emoji: '🔐', label: 'Local Encryption' },
+      {
+        path: '/local-encryption',
+        emoji: '🔐',
+        label: 'Step1: Local Encryption',
+      },
       {
         path: '/upload-encrypted-data',
         emoji: '⏫',
-        label: 'Upload Encrypted Data',
+        label: 'Step2: Upload Encrypted Data',
       },
       {
         path: '/one-click-operation',
