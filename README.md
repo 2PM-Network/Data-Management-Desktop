@@ -4,9 +4,13 @@ Create a new python environment.
 
 Use `pyinstaller` to compile the `src/py/server.py` file: `pyinstaller --onefile server.py`. Will find a compiled file called `server` in the dist folder. It should be an executable file.
 
-Move the compiled file in the same folder with `main.ts` file.
+Test the function in the following command:
 
-You can check more details in file `main.ts`:
+```python
+python server.py <function_name>
+```
+
+You can check more configurations in the file `main.ts`:
 
 ```typescript
 ipcMain.handle(
@@ -53,4 +57,4 @@ const handleClick = async () => {
 
 Use `npm start` to test, and `npm run build` to check the compiled electron app.
 
-Note: Put the compiled python file (server) and the compiled electron app in the same folder.
+Note: Make sure compiled python file (server) and the compiled electron app in the same folder.
