@@ -4,6 +4,7 @@ const UploadEncryptedData = () => {
   const [file, setFile] = useState(null);
   const [error, setError] = useState('');
   const [isDragOver, setIsDragOver] = useState(false);
+  const [pythonResult, setPythonResult] = useState('');
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -22,6 +23,19 @@ const UploadEncryptedData = () => {
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
+  };
+
+  const handleClick = async () => {
+    try {
+      const result = await window.electron.ipcRenderer.invoke(
+        'call-python',
+        'fhe',
+      );
+      console.log('Python script output:', result);
+      setPythonResult(result);
+    } catch (error) {
+      console.error('Error calling Python script:', error);
+    }
   };
 
   const handleSubmit = (e) => {
@@ -84,6 +98,8 @@ const UploadEncryptedData = () => {
           </button>
         </div>
       </form>
+      <button onClick={handleClick}>Call main</button>
+      <p>{pythonResult}</p>
     </div>
   );
 };
